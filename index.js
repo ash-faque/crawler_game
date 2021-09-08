@@ -8,7 +8,9 @@ app.get('/', (req, res) => {
 	res.setHeader('Content-type: image/png');
 	res.send(canvas.toBuffer());
 });
-
+app.get('/t', (req, res) => {
+	res.send('Myru');
+});
 const { createCanvas, loadImage } = require('canvas');
 const canvas = createCanvas(200, 200);
 const ctx = canvas.getContext('2d');
