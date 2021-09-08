@@ -1,12 +1,12 @@
 const express = require("express");
 const app = express();
 const port = 9028;
-const fs = require('fs');
 
 let c = 0;
 
 app.get('/', (req, res) => {
-	res.sendFile(__dirname + '/awsome.png');
+	res.setHeader('Content-type: image/png');
+	res.send(canvas.toBuffer());
 });
 
 const { createCanvas, loadImage } = require('canvas');
@@ -26,10 +26,7 @@ const draw = () => {
 	ctx.lineTo(50 + text.width, 102)
 	ctx.stroke()
 	ctx.closePath()
-
 	ctx.fillText(c, 80, 160)
-
-	fs.writeFileSync(__dirname + '/awsome.png', canvas.toBuffer())
 };
 
 // node sheduler
