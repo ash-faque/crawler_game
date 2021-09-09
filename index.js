@@ -220,8 +220,6 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
     ad.onload = () => ctx.drawImage(ad, s, 0, s, 0.66*s);
     ad.src = '/engi.png'
     console.log('...drawing complete...');
-
-    fs.writeFileSync(__dirname + '/game.png', canvas.toBuffer());
     ////////////////////////////////////////
 
     // formulate text for tweet....
