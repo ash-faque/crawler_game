@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 // env
-//require('dotenv').config();
+// require('dotenv').config();
 // twitter
 const Twitter = require('twitter');
 const client = new Twitter({
@@ -19,12 +19,12 @@ const deta = Deta(process.env.DETA_BASE_KEY);
 const game = deta.Base('game');
 // node sheduler
 const schedule = require('node-schedule');
-var cron_ex = '00 */10 * * * *';
+var cron_ex = '0 */10 * * * *';
 // next cell module
 const findNextCell = require('./findNextCell');
 ////////// global canvas constands
 const { createCanvas, Image } = require('canvas');
-const fs = require('fs');
+//const fs = require('fs');
 const n = 6,
       s = n * 50,
       canvas = createCanvas(2*s, s),
@@ -127,6 +127,7 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
     console.log('Next cell: ', nextCell);
     // collision with apple
     if ((nextCell[0] === apple[0]) && (nextCell[1] === apple[1])) ate = true;
+    console.log('ATE: ', ate);
     // apple gen
     let newScore, new_h_score;
     if (ate){
@@ -147,12 +148,12 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
     // snake growing
     newSnake = [nextCell, ...snake];
     // collision with body
-    newSnake.forEach(part => {
+    snake.forEach(part => {
         if ((nextCell[0] === part[0]) && (nextCell[1] === part[1])){
             died = true;
         };
     });
-
+    console.log('DIED: ', died);
     ////////////////////////////////////////
     // draw game
     console.log('...starts to draw...');
@@ -224,18 +225,15 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
 
     // formulate text for tweet....
     let post_text = "NOW SNAKE ATE " + newScore + " APPLES AND HIGHEST EATEN IS " + new_h_score + " APPLES";
-
-    // result obj
-    console.log('PROCESS RESULTS: ', {
-        "media_b64": canvas.toBuffer().toString('base64'),
-        "text": post_text,
-        "snake": newSnake,
-        "apple": newApple,
-        "ate": ate,
-        "dead": died,
-        "h_score": new_h_score,
-        "score": newScore
-    });
+    console.log('PROCESS RESULTS: ')
+    //console.log("media_b64": canvas.toBuffer().toString('base64'))
+    //console.log("text", post_text) 
+    console.log("snake", newSnake)
+    console.log("apple", newApple)
+    console.log("ate", ate)
+    console.log("dead", died)
+    console.log("h_score", new_h_score)
+    console.log("score", newScore)
     //postGame(media_b64, text, snake, apple, score, h_score, dead, res);
     postGame(canvas.toBuffer().toString('base64'), post_text, newSnake, newApple, newScore, new_h_score, died);
 };

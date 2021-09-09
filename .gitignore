@@ -107,5 +107,6 @@ dist
 sprites/
 
 
-# draw w svg module
+
 old_files_not_in_use
+test.js
