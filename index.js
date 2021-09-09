@@ -199,12 +199,13 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
         ctx.fillRect(x + 10, y + 40, 10, 10);
         ctx.fillRect(x + 30, y + 40, 10, 10);
     };
+
     // apple
-    ctx.fillStyle = '#000000cb';
-    ctx.fillRect(newApple[0]*50, newApple[1]*50, 50, 50);
-    ctx.fillStyle = "#ff0000cb";
-    ctx.font = "35px monospace";
-    ctx.fillText("🍎", newApple[0]*50 + 3, newApple[1]*50 + 38);
+    let apple_sprite = new Image();
+    apple_sprite.onload = () => ctx.drawImage(apple_sprite, newApple[0]*50, newApple[1]*50, 50, 50);
+    apple_sprite.onerror = (e) => console.log(e);
+    apple_sprite.src = 'apple.png';
+
     // write tweets and love counts
     ctx.fillStyle = '#525252';
     ctx.fillRect(s, 0.66*s, s, 0.34*s);
@@ -216,10 +217,14 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
     ctx.fillStyle = "#ffe600d7";
     ctx.font = "50px Arial";
     ctx.fillText("🐓", 2*s - 90, s - 35);
+
     // classifieds drawing
-    let ad = new Image();
-    ad.onload = () => ctx.drawImage(ad, s, 0, s, 0.66*s);
-    ad.src = '/engi.png'
+    // let bannar = new Image();
+    // bannar.onload = () => ctx.drawImage(bannar, s, 0, s, 0.66*s);
+    // bannar.onerror = (e) => console.log(e);
+    // bannar.src = 'engi.jpg';
+    ctx.fillStyle = "#0005d";
+    ctx.fillRect(s, 0, s, 0.66*s);
     console.log('...drawing complete...');
     ////////////////////////////////////////
 
