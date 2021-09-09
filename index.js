@@ -19,7 +19,7 @@ const deta = Deta(process.env.DETA_BASE_KEY);
 const game = deta.Base('game');
 // node sheduler
 const schedule = require('node-schedule');
-var cron_ex = '0 */10 * * * *';
+var cron_ex = '0 */15 * * * *';
 // next cell module
 const findNextCell = require('./findNextCell');
 ////////// global canvas constands
@@ -214,16 +214,13 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
     ctx.fillText("LAST  POST  GOT", s + 15, 0.7*s + 20);
     ctx.fillText(`${loves}  LIKES  AND`, s + 15, 0.7*s + 45);
     ctx.fillText(`${rts}  RETWEETS.`, s + 15, 0.7*s + 70);
-    ctx.fillStyle = "#ffe600d7";
-    ctx.font = "50px Arial";
-    ctx.fillText("🐓", 2*s - 90, s - 35);
 
     // classifieds drawing
     // let bannar = new Image();
     // bannar.onload = () => ctx.drawImage(bannar, s, 0, s, 0.66*s);
     // bannar.onerror = (e) => console.log(e);
     // bannar.src = 'engi.jpg';
-    ctx.fillStyle = "#0005d";
+    ctx.fillStyle = "#00000090";
     ctx.fillRect(s, 0, s, 0.66*s);
     console.log('...drawing complete...');
     ////////////////////////////////////////
@@ -292,4 +289,3 @@ app.get('/', (req, res) => {
 });
 
 app.listen(3000, () => console.log('LISTENING @ :3000'));
-initUpdate();
