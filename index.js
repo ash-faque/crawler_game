@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 // env
-require('dotenv').config();
+//require('dotenv').config();
 // twitter
 const Twitter = require('twitter');
 const client = new Twitter({
