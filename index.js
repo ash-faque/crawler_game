@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-const port = 9028;
 
 let c = 0;
 
@@ -39,4 +38,4 @@ const job = schedule.scheduleJob('*/10 * * * * *', function(){
 	c++
 });
 
-app.listen(port, () => console.log(`HelloNode app listening on port ${port}!`));
+app.listen(3000, () => console.log(`App is listening...`));

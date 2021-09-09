@@ -1,13 +1,17 @@
 # syntax=docker/dockerfile:1
 
-FROM node:14-alpine
+FROM node:14.3.0
 
-RUN apk add --no-cache python g++ make
+ENV NODE_ENV=production
 
-WORKDIR /crawler_game
+WORKDIR /
+
+COPY ["package.json", "package-lock.json*", "./"]
+
+RUN npm install --production
 
 COPY . .
 
-RUN npm install --production
+EXPOSE 3000
 
 CMD ["node", "index.js"]
