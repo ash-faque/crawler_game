@@ -4,7 +4,7 @@ const app = express();
 let c = 0;
 
 app.get('/', (req, res) => {
-	res.setHeader('Content-type: image/png');
+	res.setHeader('Content-type', 'image/png');
 	res.send(canvas.toBuffer());
 });
 app.get('/t', (req, res) => {
