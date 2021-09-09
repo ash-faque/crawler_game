@@ -12,7 +12,12 @@
   "license": "ISC",
   "dependencies": {
     "canvas": "^2.8.0",
+    "deta": "^1.0.0",
     "express": "^4.17.1",
-    "node-schedule": "^2.0.0"
+    "node-schedule": "^2.0.0",
+    "twitter": "^1.7.1"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0"
   }
 }
