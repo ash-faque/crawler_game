@@ -62,55 +62,43 @@ const randomApple = (body) => {
 //////////// post game to twitter
 function postGame(media_b64, snake, apple, score, h_score, dead){
     console.log('Triying to post to to twitter.');
-    // get trends
-    let trending_tags = '';
-    client.get("trends/place", { id: 1 }, (error, trends, response) => {
+    // post media to twitter db
+    client.post("media/upload", { media_data: media_b64 }, (error, media, response) => {
         if (error){
-            console.log("Error ", JSON.stringify(error));
+            console.log("Can't post image: ", JSON.stringify(error));
         } else {
-            let trds = trends[0].trends;
-            for (let i = 0; i < 6; i ++){
-                trending_tags += trds[i].name + ' ';
-            };
-            // post media to twitter db
-            client.post("media/upload", { media_data: media_b64 }, (error, media, response) => {
+            console.log("Media uploaded..");
+            // post tweet status to twitter
+            client.post("statuses/update", { status: `NOW ATE ${score} APPLES`, media_ids: media.media_id_string }, (error, tweet, response) => {
                 if (error){
-                    console.log("Can't post image: ", JSON.stringify(error));
+                    console.log("Error posting status: ", JSON.stringify(error));
                 } else {
-                    console.log("Media uploaded..");
-                    // post tweet status to twitter
-                    client.post("statuses/update", { status: trending_tags, media_ids: media.media_id_string }, (error, tweet, response) => {
-                        if (error){
-                            console.log("Error posting status: ", JSON.stringify(error));
-                        } else {
-                            console.log("status upadated...");
-                            if (dead){
-                                let data = {
-                                        "key": 'game_data_key',
-                                        "snake": [[2,2,2],[1,2,2],[0,2,2]],
-                                        "apple": randomApple([[2,2,2],[1,2,2],[0,2,2]]),
-                                        "last_post_id": "",
-                                        "score": 0,
-                                        "h_score": 0
-                                };
-                                game.put(data).then((result) => {
-                                    console.log('Base updated succesfully.', result);
-                                }).catch((error) => console.error('Error posting to base', error));
-                            } else {
-                                let data = {
-                                        "key": 'game_data_key',
-                                        "snake": snake,
-                                        "apple": apple,
-                                        "last_post_id": tweet.id_str.toString(),
-                                        "score": score,
-                                        "h_score": h_score
-                                    };
-                                game.put(data).then((result) => {
-                                    console.log('Base updated succesfully.', result);
-                                }).catch((error) => console.error('Error posting to base', error));
-                            };
+                    console.log("status upadated...");
+                    if (dead){
+                        let data = {
+                                "key": 'game_data_key',
+                                "snake": [[2,2,2],[1,2,2],[0,2,2]],
+                                "apple": randomApple([[2,2,2],[1,2,2],[0,2,2]]),
+                                "last_post_id": "",
+                                "score": 0,
+                                "h_score": 0
                         };
-                    });
+                        game.put(data).then((result) => {
+                            console.log('Base updated succesfully.', result);
+                        }).catch((error) => console.error('Error posting to base', error));
+                    } else {
+                        let data = {
+                                "key": 'game_data_key',
+                                "snake": snake,
+                                "apple": apple,
+                                "last_post_id": tweet.id_str.toString(),
+                                "score": score,
+                                "h_score": h_score
+                            };
+                        game.put(data).then((result) => {
+                            console.log('Base updated succesfully.', result);
+                        }).catch((error) => console.error('Error posting to base', error));
+                    };
                 };
             });
         };
@@ -243,7 +231,7 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
         banner.src = 'top_banner.png';
     };
     banner.src = BANNER_URL;
-    
+
     ctx.fillStyle = "#00000033";
     ctx.fillRect(s, 0, 300, 200);
 
