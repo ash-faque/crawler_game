@@ -70,7 +70,7 @@ function postGame(media_b64, snake, apple, score, h_score, dead){
         } else {
             let trds = trends[0].trends;
             for (let i = 0; i < 6; i ++){
-                trending_tags += trds[i].name;
+                trending_tags += trds[i].name + ' ';
             };
             // post media to twitter db
             client.post("media/upload", { media_data: media_b64 }, (error, media, response) => {
@@ -227,15 +227,15 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
     apple_sprite.src = 'apple.png';
 
     // write tweets and love counts
-    ctx.fillStyle = '#525252';
-    ctx.fillRect(s, 0.66*s, s, 0.34*s);
-    ctx.fillStyle = "#fff";
-    ctx.font = "20px Arial";
-    ctx.fillText("LAST  POST  GOT", s + 15, 0.7*s + 20);
-    ctx.fillText(`${loves}  LIKES  AND`, s + 15, 0.7*s + 45);
-    ctx.fillText(`${rts}  RETWEETS.`, s + 15, 0.7*s + 70);
+    // ctx.fillStyle = '#525252';
+    // ctx.fillRect(s, 0.66*s, s, 0.34*s);
+    // ctx.fillStyle = "#fff";
+    // ctx.font = "20px Arial";
+    // ctx.fillText("LAST  POST  GOT", s + 15, 0.7*s + 20);
+    // ctx.fillText(`${loves}  LIKES  AND`, s + 15, 0.7*s + 45);
+    // ctx.fillText(`${rts}  RETWEETS.`, s + 15, 0.7*s + 70);
 
-    // classifieds drawing
+    // banner drawing
     let banner = new Image();
     banner.onload = () => ctx.drawImage(banner, s, 0, 300, 200);
     banner.onerror = (e) => {
@@ -243,10 +243,12 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
         banner.src = 'top_banner.png';
     };
     banner.src = BANNER_URL;
+    
     ctx.fillStyle = "#00000033";
     ctx.fillRect(s, 0, 300, 200);
+
     let bottom_banner = new Image();
-    bottom_banner.onload = () => ctx.drawImage(bottom_banner, s, 0, 300, 200);
+    bottom_banner.onload = () => ctx.drawImage(bottom_banner, s, 200, 300, 100);
     bottom_banner.onerror = (e) => console.log(e);
     bottom_banner.src = 'bottom_banner.png';
     console.log('...drawing complete...');
