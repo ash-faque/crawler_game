@@ -19,7 +19,7 @@ const deta = Deta(process.env.DETA_BASE_KEY);
 const game = deta.Base('game');
 // node sheduler
 const schedule = require('node-schedule');
-var cron_ex = '0 */15 * * * *';
+var cron_ex = '0 */20 * * * *';
 // next cell module
 const findNextCell = require('./findNextCell');
 ////////// global canvas constands
@@ -29,6 +29,7 @@ const n = 6,
       s = n * 50,
       canvas = createCanvas(2*s, s),
       ctx = canvas.getContext('2d');
+var BANNER_URL = "";
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
@@ -123,13 +124,15 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
         newApple = [],
         ate = false,
         died = false,
-        nextCell = findNextCell(dir, snake[0]);
+        nextCell = findNextCell(dir, snake[0]),
+        newScore = score, 
+        new_h_score = h_score;
     console.log('Next cell: ', nextCell);
+
     // collision with apple
     if ((nextCell[0] === apple[0]) && (nextCell[1] === apple[1])) ate = true;
     console.log('ATE: ', ate);
     // apple gen
-    let newScore, new_h_score;
     if (ate){
         newApple = randomApple(newSnake);
         newScore += 1;
@@ -138,8 +141,7 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
         } else {
             new_h_score = h_score;
         };
-    };
-    if (!ate){
+    } else {
         snake.pop();
         newApple = apple;
         newScore = score;
@@ -216,12 +218,19 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
     ctx.fillText(`${rts}  RETWEETS.`, s + 15, 0.7*s + 70);
 
     // classifieds drawing
-    // let bannar = new Image();
-    // bannar.onload = () => ctx.drawImage(bannar, s, 0, s, 0.66*s);
-    // bannar.onerror = (e) => console.log(e);
-    // bannar.src = 'engi.jpg';
-    ctx.fillStyle = "#00000090";
-    ctx.fillRect(s, 0, s, 0.66*s);
+    let banner = new Image();
+    banner.onload = () => ctx.drawImage(banner, s, 0, 300, 200);
+    banner.onerror = (e) => {
+        console.log(e);
+        banner.src = 'top_banner.png';
+    };
+    banner.src = BANNER_URL;
+    ctx.fillStyle = "#00000033";
+    ctx.fillRect(s, 0, 300, 200);
+    let bottom_banner = new Image();
+    bottom_banner.onload = () => ctx.drawImage(bottom_banner, s, 0, 300, 200);
+    bottom_banner.onerror = (e) => console.log(e);
+    bottom_banner.src = 'bottom_banner.png';
     console.log('...drawing complete...');
     ////////////////////////////////////////
 
@@ -285,7 +294,15 @@ const job = schedule.scheduleJob(cron_ex, function(){
 
 // app routes
 app.get('/', (req, res) => {
-    res.send('SERVER IS OK');
+    res.sendFile(__dirname + '/public/update.html');
 });
-
+// app routes
+app.post('/update', (req, res) => {
+    if (req.body.key === process.env.BANNER_UPDATION_KEY){
+        BANNER_URL = req.body.banner_image;
+        res.sendStatus(201);
+    } else {
+        res.sendStatus(203);
+    };
+});
 app.listen(3000, () => console.log('LISTENING @ :3000'));

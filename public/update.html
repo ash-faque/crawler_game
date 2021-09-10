@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPDATE</title>
+    <link rel="stylesheet" href="color.css">
+</head>
+<body>
+    <form id="update_banner_image">
+        <h1>Portal for classifieds banner updation.</h1>
+        <p>Whatever size be submitted, will crop into 300x200 px size while publishing.
+            Make suer the image is displaying properly after typing the 'Banner image url'.</p>
+        <label for="banner_image">Banner image url: </label>
+        <input type="url" name="banner_image" id="banner_image">
+        <img src="" alt="hot_load" id="hot_load">
+        <label for="key">Your access key: </label>
+        <input type="password" name="key" id="key" required autocomplete="off">
+        <p id="result"></p>
+        <input type="submit" value="update" id="submit">
+    </form>
+    <script src="/script.js"></script>
+</body>
+</html>
