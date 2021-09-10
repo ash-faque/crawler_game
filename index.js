@@ -59,45 +59,57 @@ const randomApple = (body) => {
 //////////////////////////////////////////////////////////
 
 //////////// post game to twitter
-function postGame(media_b64, text, snake, apple, score, h_score, dead){
+function postGame(media_b64, snake, apple, score, h_score, dead){
     console.log('Triying to post to to twitter.');
-    // post media to twitter db
-    client.post("media/upload", { media_data: media_b64 }, (error, media, response) => {
+    // get trends
+    let trending_tags = '';
+    client.get("trends/place", { id: 1 }, (error, trends, response) => {
         if (error){
-            console.log("Can't post image: ", JSON.stringify(error));
+            console.log("Error ", JSON.stringify(error));
         } else {
-            console.log("Media uploaded..");
-            // post tweet status to twitter
-            client.post("statuses/update", { status: text, media_ids: media.media_id_string }, (error, tweet, response) => {
+            let trds = trends[0].trends;
+            for (let i = 0; i < 6; i ++){
+                trending_tags += trds[i].name;
+            };
+            // post media to twitter db
+            client.post("media/upload", { media_data: media_b64 }, (error, media, response) => {
                 if (error){
-                    console.log("Error posting status: ", JSON.stringify(error));
+                    console.log("Can't post image: ", JSON.stringify(error));
                 } else {
-                    console.log("status upadated...");
-                    if (dead){
-                        let data = {
-                                "key": 'game_data_key',
-                                "snake": [[2,2,2],[1,2,2],[0,2,2]],
-                                "apple": randomApple([[2,2,2],[1,2,2],[0,2,2]]),
-                                "last_post_id": "",
-                                "score": 0,
-                                "h_score": 0
-                        };
-                        game.put(data).then((result) => {
-                            console.log('Base updated succesfully.', result);
-                        }).catch((error) => console.error('Error posting to base', error));
-                    } else {
-                        let data = {
-                                "key": 'game_data_key',
-                                "snake": snake,
-                                "apple": apple,
-                                "last_post_id": tweet.id_str.toString(),
-                                "score": score,
-                                "h_score": h_score
+                    console.log("Media uploaded..");
+                    // post tweet status to twitter
+                    client.post("statuses/update", { status: trending_tags, media_ids: media.media_id_string }, (error, tweet, response) => {
+                        if (error){
+                            console.log("Error posting status: ", JSON.stringify(error));
+                        } else {
+                            console.log("status upadated...");
+                            if (dead){
+                                let data = {
+                                        "key": 'game_data_key',
+                                        "snake": [[2,2,2],[1,2,2],[0,2,2]],
+                                        "apple": randomApple([[2,2,2],[1,2,2],[0,2,2]]),
+                                        "last_post_id": "",
+                                        "score": 0,
+                                        "h_score": 0
+                                };
+                                game.put(data).then((result) => {
+                                    console.log('Base updated succesfully.', result);
+                                }).catch((error) => console.error('Error posting to base', error));
+                            } else {
+                                let data = {
+                                        "key": 'game_data_key',
+                                        "snake": snake,
+                                        "apple": apple,
+                                        "last_post_id": tweet.id_str.toString(),
+                                        "score": score,
+                                        "h_score": h_score
+                                    };
+                                game.put(data).then((result) => {
+                                    console.log('Base updated succesfully.', result);
+                                }).catch((error) => console.error('Error posting to base', error));
                             };
-                        game.put(data).then((result) => {
-                            console.log('Base updated succesfully.', result);
-                        }).catch((error) => console.error('Error posting to base', error));
-                    };
+                        };
+                    });
                 };
             });
         };
@@ -105,7 +117,12 @@ function postGame(media_b64, text, snake, apple, score, h_score, dead){
 };
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 
 ////////// game processor function
 function processGame(snake = [], apple = [], rts, loves, score, h_score){
@@ -234,19 +251,17 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
     console.log('...drawing complete...');
     ////////////////////////////////////////
 
-    // formulate text for tweet....
-    let post_text = "NOW SNAKE ATE " + newScore + " APPLES AND HIGHEST EATEN IS " + new_h_score + " APPLES";
     console.log('PROCESS RESULTS: ')
     //console.log("media_b64": canvas.toBuffer().toString('base64'))
-    //console.log("text", post_text) 
     console.log("snake", newSnake)
     console.log("apple", newApple)
     console.log("ate", ate)
     console.log("dead", died)
     console.log("h_score", new_h_score)
     console.log("score", newScore)
+
     //postGame(media_b64, text, snake, apple, score, h_score, dead, res);
-    postGame(canvas.toBuffer().toString('base64'), post_text, newSnake, newApple, newScore, new_h_score, died);
+    postGame(canvas.toBuffer().toString('base64'), newSnake, newApple, newScore, new_h_score, died);
 };
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
