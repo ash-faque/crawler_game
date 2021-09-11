@@ -35,26 +35,15 @@ var BANNER_URL = "";
 //////////////////////////////////////////////////////////
 
 /////////////// random apple generator
-const random = () => {
-    return [(Math.floor((Math.random() * 5) + 1)), (Math.floor((Math.random() * 5) + 1))];
-};
-const checkColllision = (body, apple) => {
-    console.log(apple);
-    let collided = false;
+const randomApple = (body) => {
+    let x = (Math.floor((Math.random() * 5) + 1)),
+        y = (Math.floor((Math.random() * 5) + 1));
     for (part of body){
-        if ((part[0] === apple[0]) && (part[1] === apple[1])){
-            collided = true;
-            break;
+        if ((part[0] === x) && (part[1] === y)){
+            randomApple(body);
         };
     };
-    if(collided){
-        checkColllision(body, random());
-    } else{
-        return apple;
-    };
-};
-const randomApple = (body) => {
-    return checkColllision(body, random());
+    return [x, y];
 };
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
