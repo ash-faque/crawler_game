@@ -232,14 +232,14 @@ function processGame(snake = [], apple = [], rts, loves, score, h_score){
     };
     banner.src = BANNER_URL;
 
-    ctx.fillStyle = "#00000033";
-    ctx.fillRect(s, 0, 300, 200);
-
     let bottom_banner = new Image();
     bottom_banner.onload = () => ctx.drawImage(bottom_banner, s, 200, 300, 100);
     bottom_banner.onerror = (e) => console.log(e);
     bottom_banner.src = 'bottom_banner.png';
     console.log('...drawing complete...');
+
+    ctx.fillStyle = "#00000033";
+    ctx.fillRect(s, 0, 300, 300);
     ////////////////////////////////////////
 
     console.log('PROCESS RESULTS: ')
